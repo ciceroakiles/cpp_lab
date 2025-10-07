@@ -77,7 +77,7 @@ string str_binseq(string str) {
 	return binseq;
 }
 
-void binseq_base64(string binseq) {
+string binseq_base64(string binseq) {
 	vector<string> groupsix;
 	string temp;
 	for (int i = 0; i < binseq.length(); i++) {
@@ -99,15 +99,17 @@ void binseq_base64(string binseq) {
 		}
 	}
 
+    string result;
 	for (string group : groupsix) {
 		if (group[0] != '=') {
 			group = base64seq[bin2dec(group)];
 		}
-		cout << group;
+		result += group;
 	}
+	return result;
 }
 
-void hex_base64(string str) {
+string hex_base64(string str) {
 	vector<string> grouptwo;
 	string temp;
 	for (int i = 0; i < str.length(); i++) {
@@ -122,10 +124,9 @@ void hex_base64(string str) {
 
 	string grouptwoTotal;
 	for (string group : grouptwo) {
-		group = hex2bin(int(group[0])) + hex2bin(int(group[1]));
-		grouptwoTotal += group;
+		grouptwoTotal +=  hex2bin(int(group[0])) + hex2bin(int(group[1]));
 	}
-	binseq_base64(grouptwoTotal);
+	return binseq_base64(grouptwoTotal);
 }
 
 int xor_bin(int x1, int x2) {
@@ -159,22 +160,26 @@ int main()
     cout << endl;
 
     cout << "b64> ";
-    binseq_base64(str_binseq(str1));
+    cout << binseq_base64(str_binseq(str1));
     cout << endl;
     */
 
     /*
     cout << "hexStr: ";
-    string str2 = "";
+    string str2 = "49276d";
     cin >> str2;
     cout << "b64> ";
-    hex_base64(str2);
+    cout << hex_base64(str2);
     cout << endl;
     */
-	
+
+    
     string str3 = "1c0111001f010100061a024b53535009181c";
-    string str4 = "686974207468652062756c6c277320657965";
+    string str4 = "686974207468652062756c6c277320657965"; // hit the bull's eye
     cout << xor_hexseqs(str3, str4) << endl;
+    
+
+    //string str5 = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
 
     return 0;
 }

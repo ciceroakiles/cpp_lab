@@ -25,9 +25,9 @@ string hex2bin(char hexChar) {
 }
 
 char bin2hex(string binary) {
-    for (auto it = hex2binMap.begin(); it != hex2binMap.end(); ++it) {
-        if (it->second == binary) return it->first;
-    }
+	for (auto it = hex2binMap.begin(); it != hex2binMap.end(); ++it) {
+		if (it->second == binary) return it->first;
+	}
 	return ' ';
 }
 
@@ -99,7 +99,7 @@ string binseq_base64(string binseq) {
 		}
 	}
 
-    string result;
+	string result;
 	for (string group : groupsix) {
 		if (group[0] != '=') {
 			group = base64seq[bin2dec(group)];
@@ -109,7 +109,7 @@ string binseq_base64(string binseq) {
 	return result;
 }
 
-string hex_base64(string str) {
+vector<string> hex_pairs(string str) {
 	vector<string> grouptwo;
 	string temp;
 	for (int i = 0; i < str.length(); i++) {
@@ -121,7 +121,11 @@ string hex_base64(string str) {
 	}
 	grouptwo.push_back(temp);
 	grouptwo.erase(grouptwo.begin());
+	return grouptwo;
+}
 
+string hex_base64(string str) {
+	vector<string> grouptwo = hex_pairs(str);
 	string grouptwoTotal;
 	for (string group : grouptwo) {
 		grouptwoTotal +=  hex2bin(int(group[0])) + hex2bin(int(group[1]));
@@ -130,56 +134,65 @@ string hex_base64(string str) {
 }
 
 int xor_bin(int x1, int x2) {
-    return (x1 != x2) ? 1 : 0;
+	return (x1 != x2) ? 1 : 0;
 }
 
 char xor_hex(char x1, char x2) {
-    string temp;
-    for (int i = 0; i < 4; i++) {
-        temp += to_string(xor_bin(hex2bin(x1)[i], hex2bin(x2)[i]));
-    }
-    return tolower(bin2hex(temp));
+	string temp;
+	for (int i = 0; i < 4; i++) {
+		temp += to_string(xor_bin(hex2bin(x1)[i], hex2bin(x2)[i]));
+	}
+	return tolower(bin2hex(temp));
 }
 
 string xor_hexseqs(string str1, string str2) {
-    string temp;
-    for (int i = 0; i < str1.length(); i++) {
-        temp += xor_hex(str1[i], str2[i]);
-    }
-    return temp;
+	string temp;
+	for (int i = 0; i < str1.length(); i++) {
+		temp += xor_hex(str1[i], str2[i]);
+	}
+	return temp;
 }
 
 int main()
 {
-    /*
-    string str1 = "I'm killing your brain like a poisonous mushroom";
-    cout << str1 << endl;
+	/*
+	string str1 = "I'm killing your brain like a poisonous mushroom";
+	cout << str1 << endl;
 
-    cout << "hex> ";
-    str_hex(str1);
-    cout << endl;
+	cout << "hex> ";
+	str_hex(str1);
+	cout << endl;
 
-    cout << "b64> ";
-    cout << binseq_base64(str_binseq(str1));
-    cout << endl;
-    */
+	cout << "b64> ";
+	cout << binseq_base64(str_binseq(str1));
+	cout << endl;
+	*/
 
-    /*
-    cout << "hexStr: ";
-    string str2 = "49276d";
-    cin >> str2;
-    cout << "b64> ";
-    cout << hex_base64(str2);
-    cout << endl;
-    */
+	/*
+	cout << "hexStr: ";
+	string str2 = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+	cin >> str2;
+	cout << "b64> ";
+	cout << hex_base64(str2);
+	cout << endl;
+	*/
 
-    
-    string str3 = "1c0111001f010100061a024b53535009181c";
-    string str4 = "686974207468652062756c6c277320657965"; // hit the bull's eye
-    cout << xor_hexseqs(str3, str4) << endl;
-    
+	/*
+	string str3 = "1c0111001f010100061a024b53535009181c";
+	string str4 = "686974207468652062756c6c277320657965"; // hit the bull's eye
+	cout << xor_hexseqs(str3, str4);
+	cout << endl;
+	*/
 
-    //string str5 = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+	string str5 = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+	vector<string> vect1 = hex_pairs(str5);
+	//for (int i = 0; i < vect1.size(); i++) { cout << vect1[i] << " "; } cout << endl; cout << endl;
+	vector<string> vect2;
+	for (int i = 0; i < vect1.size(); i++) {
+		vect2.push_back(hex2bin(vect1[i][0]) + hex2bin(vect1[i][1]));
+		cout << vect2[i] << " ";
+	}
+	cout << endl;
 
-    return 0;
+	return 0;
 }
